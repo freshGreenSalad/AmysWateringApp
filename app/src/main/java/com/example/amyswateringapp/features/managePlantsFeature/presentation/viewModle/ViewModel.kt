@@ -1,10 +1,11 @@
-package com.example.amyswateringapp
+package com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.amyswateringapp.DI.IoDispatcher
+import com.example.amyswateringapp.IsWatered
+import com.example.amyswateringapp.Plant
 import com.example.amyswateringapp.features.managePlantsFeature.domain.PlantRepository
-import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.onEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
@@ -19,14 +20,16 @@ class wateringViewModel @Inject constructor(
     private val plantRepository: PlantRepository,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ): ViewModel() {
-    val scope = viewModelScope
+    private val scope = viewModelScope
 
     val newPlant = MutableStateFlow(Plant())
 
     val plantsFlow = plantRepository.allPlants()
         .map {
             if(it.needsWatering.isNullOrEmpty() && it.doesNotNeedWatering.isNullOrEmpty())
-            { plantListState.Empty }
+            {
+                plantListState.Empty
+            }
             else{
                 plantListState.Success(it)
             }

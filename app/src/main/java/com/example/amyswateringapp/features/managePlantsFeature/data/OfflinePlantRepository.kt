@@ -15,8 +15,6 @@ class OfflinePlantRepository @Inject constructor(
         wateringDao.insertAll(plant)
     }
 
-
-
     override fun allPlants(): Flow<IsWatered> = wateringDao.getall() .map { PlantList ->
         returnIsWatered(PlantList)
     }
@@ -55,5 +53,4 @@ fun returnIsWatered(list:List<Plant>):IsWatered{
         needsWatering = needsWatering,
         doesNotNeedWatering = doesNotNeedWatering
     )
-
 }

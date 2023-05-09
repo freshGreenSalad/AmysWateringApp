@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.wateringAppScreen
+package com.example.amyswateringapp.features.managePlantsFeature.presentation
 
 import android.graphics.Bitmap
 import android.net.Uri
@@ -121,7 +121,7 @@ fun addPlantDialog(
                             CameraComposable(launcher)
                             exitLauncher()
                         },
-                        clickableComposable = {click -> cameraButton(click, enabled.value)}
+                        clickableComposable = {click -> cameraButton(click, enabled.value) }
                     )
                 }
             }
@@ -173,24 +173,5 @@ fun cameraButton(onClick:()->Unit, enabled: Boolean) {
                 Text("Take a photo")
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun previewAddPlant() {
-    val plant = remember {
-        mutableStateOf(Plant(1, "", 5, Uri.EMPTY, LocalDateTime.now()))
-    }
-    AmysWateringAppTheme() {
-        //addPlantDialog({}, plant,{},{}, {}, {})
-    }
-}
-
-@Preview
-@Composable
-fun previewCameraButton() {
-    AmysWateringAppTheme {
-        cameraButton({}, true )
     }
 }

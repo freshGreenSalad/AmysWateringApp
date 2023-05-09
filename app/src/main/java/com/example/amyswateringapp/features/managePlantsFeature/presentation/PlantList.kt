@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
+import androidx.compose.material.SwipeableState
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material.swipeable
@@ -32,15 +33,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.compose.rememberAsyncImagePainter
 import com.example.amyswateringapp.IsWatered
 import com.example.amyswateringapp.Plant
 import com.example.amyswateringapp.R
-import com.example.amyswateringapp.plantListState
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.plantListState
 import com.example.amyswateringapp.common.presentation.theme.AmysWateringAppTheme
 import java.time.LocalDateTime
 
@@ -147,67 +147,28 @@ fun PlantList(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun plantCard(plant:Plant, waterplant:(Plant)->Unit, makeItRain:()->Unit, deletePlant:(Plant)->Unit ) {
-    val plantUri = plant.image
-    val plantWateringTime = plant.NextWateringTime
-
-    val zIndexOfRubish = remember{ mutableStateOf(0f) }
-
-
+fun plantCard(
+    plant:Plant,
+    waterplant:(Plant)->Unit,
+    makeItRain:()->Unit,
+    deletePlant:(Plant)->Unit
+) {
     val swipeableState = rememberSwipeableState(0)
-    val deleteStateOffset = remember {mutableStateOf(0.dp)}
-    val animateDeleteStateOffset = animateDpAsState(
-        targetValue = deleteStateOffset.value ,
-        finishedListener = {deletePlant(plant)}
-    )
+    val deleteStateOffset = remember { mutableStateOf(0.dp) }
+    Box{
 
-
-    val dpToPx = with(LocalDensity.current) { 100.dp.toPx() }
-
-    val pxToDp = with(LocalDensity.current) { swipeableState.offset.value.toDp() }
-
-    val anchors = mapOf(0f to 0, dpToPx to 1,)
-
-    LaunchedEffect(key1 = swipeableState.targetValue){
-        if (swipeableState.currentValue == 1) {zIndexOfRubish.value = 1f}
-        else {zIndexOfRubish.value = 0f}
-    }
-
-    Box() {
-
-        Row (
-            modifier = Modifier
-                .zIndex(0.5f)
-                .swipeable(
-                    state = swipeableState, // remembers the current anchor
-                    anchors = anchors, //points where the swipeable child can stop
-                    thresholds = { _, _ -> FractionalThreshold(0.3f) },// how much to move to next anchor
-                    orientation = Orientation.Horizontal // direction of swipe
-                ).semantics { testTag = "plantCard" }
-                .offset(
-                    pxToDp + animateDeleteStateOffset.value,
-                    0.dp
-                )
-                .fillMaxWidth()
-                .padding(8.dp)//MaterialTheme.padding.card)
-                .shadow(3.dp, shape = RoundedCornerShape(8.dp))
-                .clip(shape = RoundedCornerShape(8.dp))
-                .background(color = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp))
-                .height(100.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            val datetime = remember{LocalDateTime.now()}
-            // whenToNextWaterText shows a day of the week if less then 7 days away and an int if more then 7
-            val whenToNextWaterText  = if (plantWateringTime.minusDays(7) <= datetime){
-                "Water on " + plantWateringTime.dayOfWeek.toString().lowercase()
-            } else { "Water in "+(plantWateringTime.dayOfYear - datetime.dayOfYear).toString()}
+    swipable(
+        deletePlant = { deletePlant(plant) },
+        swipeableState = swipeableState,
+        deleteStateOffset = deleteStateOffset,
+        content = {
             Box {
                 Row {
-                    plantImage(plantUri)
+                    plantImage(plant.image)
                     Column(Modifier.padding(8.dp)) {
                         Text(text = plant.plantName)
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text(modifier = Modifier.width(150.dp), text = whenToNextWaterText)
+                        Text(modifier = Modifier.width(150.dp), text = whenToNextWater(plant))
                     }
                 }
             }
@@ -231,62 +192,132 @@ fun plantCard(plant:Plant, waterplant:(Plant)->Unit, makeItRain:()->Unit, delete
                     contentDescription = "Water Icon"
                 )
             }
-
         }
-
-        AnimatedVisibility(
-            modifier = Modifier.zIndex(.4f),
-            visible = swipeableState.currentValue == 1,
-            enter = fadeIn(tween(100)),
-            exit = fadeOut(tween(100))
+    )
+    animatevis(swipeableState = swipeableState) {
+        Box(
+            Modifier
+                .size(100.dp)
+                .semantics { testTag = "bin" },
+            contentAlignment = Alignment.Center
         ) {
+            Icon(
+                modifier = Modifier
+                    .size(80.dp),
+                painter = painterResource(R.drawable.delete),
+                contentDescription = "",
+                tint = MaterialTheme.colorScheme.error
+            )
+        }
+    }
+    animatevis(swipeableState = swipeableState) {
+        Box(
+            Modifier.size(100.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            val screenWidth = LocalConfiguration.current.screenHeightDp.dp
             Box(
-                Modifier.size(100.dp).semantics { testTag = "bin" },
-                contentAlignment = Alignment.Center
+                Modifier
+                    .size(80.dp)
+                    .zIndex(1f)
             ) {
                 Icon(
                     modifier = Modifier
-                        .size(80.dp),
+                        .size(80.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(color = Color.Black)
+                        ) { deleteStateOffset.value = screenWidth },
                     painter = painterResource(R.drawable.delete),
                     contentDescription = "",
-                    tint = MaterialTheme.colorScheme.error
+                    tint = Color.Transparent
                 )
             }
         }
+    }
+}
+}
 
-        AnimatedVisibility(
-            modifier = Modifier.zIndex(1f),
-            visible = swipeableState.currentValue == 1,
-            enter = fadeIn(tween(100)),
-            exit = fadeOut(tween(100))
-        ) {
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun animatevis(swipeableState: SwipeableState<Int>, content: @Composable ()->Unit) {
+    AnimatedVisibility(
+        modifier = Modifier.zIndex(1f),
+        visible = swipeableState.currentValue == 1,
+        enter = fadeIn(tween(100)),
+        exit = fadeOut(tween(100))
+    ) {
+        content()
+    }
 
-            Box(
-                Modifier.size(100.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                val screenWidth = LocalConfiguration.current.screenHeightDp.dp
-                Box(
-                    Modifier
-                        .size(80.dp)
-                        .zIndex(1f)
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .size(80.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = rememberRipple(color = Color.Black)
-                            ) { deleteStateOffset.value = screenWidth },
-                        painter = painterResource(R.drawable.delete),
-                        contentDescription = "",
-                        tint = Color.Transparent
-                    )
-                }
-            }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun swipable(
+    content: @Composable() ()-> Unit,
+    deletePlant: () -> Unit,
+    deleteStateOffset: MutableState<Dp>,
+    swipeableState: SwipeableState<Int>
+) {
+    val zIndexOfRubbishIcon = remember { mutableStateOf(0f) }
+
+
+    val animateDeleteStateOffset = animateDpAsState(
+        targetValue = deleteStateOffset.value,
+        finishedListener = { deletePlant() }
+    )
+
+
+    val dpToPx = with(LocalDensity.current) { 100.dp.toPx() }
+
+    val pxToDp = with(LocalDensity.current) { swipeableState.offset.value.toDp() }
+
+    val anchors = mapOf(0f to 0, dpToPx to 1,)
+
+    LaunchedEffect(key1 = swipeableState.targetValue) {
+        if (swipeableState.currentValue == 1) {
+            zIndexOfRubbishIcon.value = 1f
+        } else {
+            zIndexOfRubbishIcon.value = 0f
         }
     }
+        Row(
+            modifier = Modifier
+                .zIndex(0.5f)
+                .swipeable(
+                    state = swipeableState, // remembers the current anchor
+                    anchors = anchors, //points where the swipeable child can stop
+                    thresholds = { _, _ -> FractionalThreshold(0.3f) },// how much to move to next anchor
+                    orientation = Orientation.Horizontal // direction of swipe
+                )
+                .semantics { testTag = "plantCard" }
+                .offset(
+                    pxToDp + animateDeleteStateOffset.value,
+                    0.dp
+                )
+                .fillMaxWidth()
+                .padding(8.dp)
+                .shadow(3.dp, shape = RoundedCornerShape(8.dp))
+                .clip(shape = RoundedCornerShape(8.dp))
+                .background(color = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp))
+                .height(100.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            content()
+        }
+
+}
+
+@Composable
+fun whenToNextWater(plant:Plant): String{
+    val datetime = remember{LocalDateTime.now()}
+    // whenToNextWaterText shows a day of the week if less then 7 days away and an int if more then 7
+    val whenToNextWaterText  = if (plant.NextWateringTime.minusDays(7) <= datetime){
+        "Water on " + plant.NextWateringTime.dayOfWeek.toString().lowercase()
+    } else { "Water in "+(plant.NextWateringTime.dayOfYear - datetime.dayOfYear).toString()}
+    return whenToNextWaterText
 }
 
 @Composable

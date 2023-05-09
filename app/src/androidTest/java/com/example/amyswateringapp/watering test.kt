@@ -4,8 +4,9 @@ import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.example.amyswateringapp.wateringAppScreen.WateringAppHomeScaffold
-import com.example.amyswateringapp.wateringAppScreen.addPlantDialog
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.WateringAppHomeScaffold
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.plantListState
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.addPlantDialog
 import org.junit.Rule
 import org.junit.Test
 
@@ -22,7 +23,7 @@ class wateringTest {
             doesNotNeedWatering = listOf(Plant()))
         val s = mutableStateOf(plantListState.Success(plantFlow = isWatered))
         composeRule.mainClock.autoAdvance = false
-        composeRule.setContent { WateringAppHomeScaffold(state,s,{})}
+        composeRule.setContent { WateringAppHomeScaffold(state,s,{}) }
         composeRule.onNodeWithTag("cloudClick" ).performClick()
         composeRule.mainClock.advanceTimeBy(500)
         composeRule.onNodeWithTag("cloud").assertExists()
@@ -36,7 +37,7 @@ class wateringTest {
             doesNotNeedWatering = listOf(Plant()))
         val s = mutableStateOf(plantListState.Success(plantFlow = isWatered))
         composeRule.mainClock.autoAdvance = false
-        composeRule.setContent { WateringAppHomeScaffold(state,s,{})}
+        composeRule.setContent { WateringAppHomeScaffold(state,s,{}) }
         composeRule.onNodeWithTag("plantCard" ).performTouchInput { swipeRight(0f, 100f) }
         composeRule.mainClock.advanceTimeBy(500)
         composeRule.onNodeWithTag("bin").assertExists()
@@ -47,7 +48,7 @@ class wateringTest {
         val state = mutableStateOf(Plant())
         val s = mutableStateOf(plantListState.Empty)
         composeRule.mainClock.autoAdvance = false
-        composeRule.setContent { WateringAppHomeScaffold(state,s,{})}
+        composeRule.setContent { WateringAppHomeScaffold(state,s,{}) }
         composeRule.onNode( hasClickAction()).performClick()
         composeRule.mainClock.advanceTimeBy(1000)
         composeRule.onAllNodes(isRoot()).assertCountEquals(2)
@@ -58,7 +59,7 @@ class wateringTest {
         val state = mutableStateOf(Plant())
         val s = mutableStateOf(plantListState.Empty)
         composeRule.mainClock.autoAdvance = false
-        composeRule.setContent { WateringAppHomeScaffold(state,s,{})}
+        composeRule.setContent { WateringAppHomeScaffold(state,s,{}) }
         composeRule.onNode( hasClickAction()).performClick()
         composeRule.mainClock.advanceTimeBy(1000)
         composeRule.onNode(hasText("Dismiss")).performClick()

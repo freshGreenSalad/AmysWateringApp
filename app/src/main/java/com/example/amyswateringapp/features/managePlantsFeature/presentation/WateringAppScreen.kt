@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.wateringAppScreen
+package com.example.amyswateringapp.features.managePlantsFeature.presentation
 
 
 import androidx.compose.animation.AnimatedVisibility
@@ -15,9 +15,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.amyswateringapp.*
-import com.example.amyswateringapp.common.presentation.theme.padding
-import com.example.amyswateringapp.features.managePlantsFeature.presentation.graphics
 import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.onEvent
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.plantListState
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.wateringViewModel
+import com.example.amyswateringapp.wateringAppScreen.AddPlantFab
+import com.example.amyswateringapp.wateringAppScreen.PlantListStates
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

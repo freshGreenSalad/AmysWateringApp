@@ -5,7 +5,7 @@ import com.example.amyswateringapp.IsWatered
 import com.example.amyswateringapp.Plant
 import com.example.amyswateringapp.features.managePlantsFeature.domain.PlantRepository
 import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.onEvent
-import com.example.amyswateringapp.wateringViewModel
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.wateringViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
