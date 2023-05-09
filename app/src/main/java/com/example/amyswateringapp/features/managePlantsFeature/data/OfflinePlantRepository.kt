@@ -1,8 +1,7 @@
 package com.example.amyswateringapp
 
-import android.util.Log
-import com.example.amyswateringapp.Repository.PlantRepository
-import com.example.amyswateringapp.Room.WateringDao
+import com.example.amyswateringapp.features.managePlantsFeature.domain.PlantRepository
+import com.example.amyswateringapp.common.data.Room.WateringDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime

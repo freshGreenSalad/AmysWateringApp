@@ -1,4 +1,4 @@
-package com.example.amyswateringapp
+package com.example.amyswateringapp.app
 
 
 import android.os.Bundle

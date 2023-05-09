@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.wateringAppScreen
+package com.example.amyswateringapp.features.managePlantsFeature.presentation
 
 
 import androidx.compose.animation.core.*
@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.amyswateringapp.ui.theme.AmysWateringAppTheme
+import com.example.amyswateringapp.common.presentation.theme.AmysWateringAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random

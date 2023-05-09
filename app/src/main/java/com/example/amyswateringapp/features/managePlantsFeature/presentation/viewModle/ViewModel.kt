@@ -3,11 +3,10 @@ package com.example.amyswateringapp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.amyswateringapp.DI.IoDispatcher
-import com.example.amyswateringapp.Repository.PlantRepository
-import com.example.amyswateringapp.viewModle.onEvent
+import com.example.amyswateringapp.features.managePlantsFeature.domain.PlantRepository
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.onEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.launch

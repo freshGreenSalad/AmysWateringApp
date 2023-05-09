@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.wateringAppScreen
+package com.example.amyswateringapp.common.presentation
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.ImeAction

@@ -1,18 +1,13 @@
 package com.example.amyswateringapp.repository
 
-import android.util.Log
-import app.cash.turbine.test
 import app.cash.turbine.testIn
 import com.example.amyswateringapp.IsWatered
 import com.example.amyswateringapp.Plant
-import com.example.amyswateringapp.Repository.PlantRepository
-import com.example.amyswateringapp.viewModle.onEvent
+import com.example.amyswateringapp.features.managePlantsFeature.domain.PlantRepository
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.onEvent
 import com.example.amyswateringapp.wateringViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Assert.assertEquals

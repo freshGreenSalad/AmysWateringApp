@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.viewModle
+package com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle
 
 import android.net.Uri
 import com.example.amyswateringapp.Plant

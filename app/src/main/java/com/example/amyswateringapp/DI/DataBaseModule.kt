@@ -2,7 +2,7 @@ package com.example.amyswateringapp.DI
 
 import android.content.Context
 import androidx.room.Room
-import com.example.amyswateringapp.Room.amysWateringAppDatabase
+import com.example.amyswateringapp.common.data.Room.amysWateringAppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

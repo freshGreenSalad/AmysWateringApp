@@ -15,8 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.amyswateringapp.*
-import com.example.amyswateringapp.ui.theme.padding
-import com.example.amyswateringapp.viewModle.onEvent
+import com.example.amyswateringapp.common.presentation.theme.padding
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.graphics
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.onEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

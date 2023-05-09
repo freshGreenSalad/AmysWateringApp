@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.Room
+package com.example.amyswateringapp.common.data.Room
 
 import androidx.room.*
 import com.example.amyswateringapp.Plant

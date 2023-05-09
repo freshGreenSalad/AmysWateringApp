@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.ui.theme
+package com.example.amyswateringapp.common.presentation.theme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

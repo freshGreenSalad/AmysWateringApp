@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.wateringAppScreen
+package com.example.amyswateringapp.common.presentation
 
 import android.app.Activity
 import android.content.Context
@@ -18,7 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
-import com.example.amyswateringapp.ui.theme.AmysWateringAppTheme
+import com.example.amyswateringapp.common.presentation.theme.AmysWateringAppTheme
 
 @Composable
 fun permission(

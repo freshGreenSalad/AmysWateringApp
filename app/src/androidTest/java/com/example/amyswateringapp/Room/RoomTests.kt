@@ -5,6 +5,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.example.amyswateringapp.Plant
+import com.example.amyswateringapp.common.data.Room.WateringDao
+import com.example.amyswateringapp.common.data.Room.amysWateringAppDatabase
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotSame
 import kotlinx.coroutines.test.runTest
@@ -20,7 +22,7 @@ import org.junit.runner.RunWith
 @SmallTest //
 class RoomTests {
     lateinit var database: amysWateringAppDatabase
-    lateinit var dao:WateringDao
+    lateinit var dao: WateringDao
 
     @Before
     fun setUp(){

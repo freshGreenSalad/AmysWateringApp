@@ -21,7 +21,10 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.amyswateringapp.Plant
-import com.example.amyswateringapp.ui.theme.AmysWateringAppTheme
+import com.example.amyswateringapp.common.presentation.MyKeyboards
+import com.example.amyswateringapp.common.presentation.permission
+import com.example.amyswateringapp.common.presentation.theme.AmysWateringAppTheme
+import com.example.amyswateringapp.features.managePlantsFeature.data.MediaStoreFunctions
 import java.time.LocalDateTime
 
 
@@ -104,7 +107,7 @@ fun addPlantDialog(
                 val launcher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.TakePicturePreview()){bitmap ->
                     if (bitmap != null) {
-                        val uri:Uri = saveInMediastore(bitmap = bitmap, context = context, plant = plant.value.plantName)
+                        val uri:Uri = MediaStoreFunctions().saveInMediastore(bitmap = bitmap, context = context, plant = plant.value.plantName)
                         updatePlantUri(uri)
                     }
                 }

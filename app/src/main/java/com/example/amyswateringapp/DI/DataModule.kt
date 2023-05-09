@@ -1,7 +1,7 @@
 package com.example.amyswateringapp.DI
 
 import com.example.amyswateringapp.OfflinePlantRepository
-import com.example.amyswateringapp.Repository.PlantRepository
+import com.example.amyswateringapp.features.managePlantsFeature.domain.PlantRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

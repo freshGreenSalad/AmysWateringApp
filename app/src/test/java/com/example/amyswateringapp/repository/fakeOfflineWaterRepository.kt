@@ -2,13 +2,13 @@ package com.example.amyswateringapp.repository
 
 import com.example.amyswateringapp.IsWatered
 import com.example.amyswateringapp.Plant
-import com.example.amyswateringapp.Repository.PlantRepository
+import com.example.amyswateringapp.features.managePlantsFeature.domain.PlantRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import java.util.*
 
 
-class fakeOfflineWaterRepository:PlantRepository {
+class fakeOfflineWaterRepository: PlantRepository {
 
     val plantList = mutableListOf<Plant>()
 

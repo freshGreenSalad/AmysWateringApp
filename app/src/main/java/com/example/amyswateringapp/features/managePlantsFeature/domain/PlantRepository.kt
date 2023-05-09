@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.Repository
+package com.example.amyswateringapp.features.managePlantsFeature.domain
 
 import com.example.amyswateringapp.IsWatered
 import com.example.amyswateringapp.Plant

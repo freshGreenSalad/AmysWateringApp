@@ -41,7 +41,7 @@ import com.example.amyswateringapp.IsWatered
 import com.example.amyswateringapp.Plant
 import com.example.amyswateringapp.R
 import com.example.amyswateringapp.plantListState
-import com.example.amyswateringapp.ui.theme.AmysWateringAppTheme
+import com.example.amyswateringapp.common.presentation.theme.AmysWateringAppTheme
 import java.time.LocalDateTime
 
 
@@ -346,8 +346,4 @@ fun previewStickyHeaderText() {
             stickyHeaderText(text = "This is a test for amys app sticky header")
         }
     }
-}
-
-enum class ThreeVariationsOfWatering{
-    allPlantsNeedToBeWatered, NoPlantsNeedToBeWatered, SomePlantsNeedToBeWatered
 }

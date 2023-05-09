@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.amyswateringapp.ui.theme.AmysWateringAppTheme
+import com.example.amyswateringapp.common.presentation.theme.AmysWateringAppTheme
 
 @Composable
 fun AddPlantFab(addPlant: ()-> Unit) {
