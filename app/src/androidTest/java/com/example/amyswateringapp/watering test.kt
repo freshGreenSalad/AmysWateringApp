@@ -1,15 +1,5 @@
 package com.example.amyswateringapp
 
-import android.net.Uri
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.test.*
-import androidx.compose.ui.test.junit4.createComposeRule
-import com.example.amyswateringapp.features.managePlantsFeature.presentation.WateringAppHomeScaffold
-import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.ScreenState
-import com.example.amyswateringapp.features.managePlantsFeature.presentation.addPlantDialog
-import org.junit.Rule
-import org.junit.Test
-
 class wateringTest {
 
    /* @get:Rule

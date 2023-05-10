@@ -25,21 +25,21 @@ import java.time.LocalDateTime
 
 
 @Composable
-fun plantCard(plant: Plant, waterPlant: () -> Unit) {
+fun PlantCard(plant: Plant, waterPlant: () -> Unit) {
     Row {
-        plantImage(plant.image)
+        PlantImage(plant.image)
         Column(Modifier.padding(8.dp)) {
             Text(text = plant.plantName)
             Spacer(modifier = Modifier.height(8.dp))
             Text(modifier = Modifier.width(150.dp), text = whenToNextWater(plant))
         }
-        WaterplantButton { waterPlant() }
     }
+    WaterPlantButton { waterPlant() }
 }
 
 
 @Composable
-fun WaterplantButton(waterplant:()->Unit) {
+fun WaterPlantButton(waterPlant:()->Unit) {
     Box(
         modifier = Modifier
             .size(100.dp)
@@ -49,7 +49,7 @@ fun WaterplantButton(waterplant:()->Unit) {
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = MaterialTheme.colorScheme.onSurface),
             ) {
-                waterplant()
+                waterPlant()
             },
         contentAlignment = Alignment.Center
     ) {
@@ -63,7 +63,7 @@ fun WaterplantButton(waterplant:()->Unit) {
 
 
 @Composable
-fun plantImage(uri: Uri) {
+fun PlantImage(uri: Uri) {
     if (uri == Uri.EMPTY) {
         androidx.compose.material.Icon(
             modifier = Modifier

@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.amyswateringapp.*
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.newPlantDialog.addPlantDialog
 import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.onEvent
 import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.ScreenState
 import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.wateringViewModel

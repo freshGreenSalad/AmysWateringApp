@@ -34,7 +34,7 @@ fun plantCardSwipableWithBin(
             deletePlant = { deletePlant(plant) },
             swipeableState = swipeableState,
             deleteStateOffset = deleteStateOffset,
-            content = {plantCard(plant, waterPlant)}
+            content = {PlantCard(plant, waterPlant)}
         )
         RubbishBinIconAnimation(swipeableState) { deleteStateOffset.value = it }
     }
