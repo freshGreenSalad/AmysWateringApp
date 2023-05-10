@@ -3,7 +3,6 @@ package com.example.amyswateringapp.features.managePlantsFeature.presentation.vi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.amyswateringapp.DI.IoDispatcher
-import com.example.amyswateringapp.IsWatered
 import com.example.amyswateringapp.Plant
 import com.example.amyswateringapp.features.managePlantsFeature.domain.PlantRepository
 import com.example.amyswateringapp.features.managePlantsFeature.domain.usecases.UsecaseGetNotWateredPlants
@@ -39,18 +38,14 @@ class wateringViewModel @Inject constructor(
         started = WhileSubscribed(5000)
     )
 
-    val plantsFlow = plantRepository.allPlantsToBeChanged()
-        .map {
-            if(it.needsWatering.isNullOrEmpty() && it.doesNotNeedWatering.isNullOrEmpty())
-            {
-                plantListState.Empty
+    val screenState = combine(wateredPlants, notWateredPlants) { wateredPlants, notwatered ->
+            if(notwatered.isEmpty() && wateredPlants.isEmpty()){
+                ScreenState.Empty
+            } else {
+                ScreenState.Success
             }
-            else{
-                plantListState.Success(it)
-            }
-        }
-        .stateIn(
-            initialValue = plantListState.Loading,
+        }.stateIn(
+            initialValue = ScreenState.Loading,
             scope = viewModelScope, //TODO("change to dispatcher")
             started = WhileSubscribed(5000)
         )
@@ -59,11 +54,11 @@ class wateringViewModel @Inject constructor(
         when(event){
             is onEvent.addPlant -> {
                 scope.launch(dispatcher) {
-                        val dateTime = LocalDateTime.now()
-                        val nextwateringTime = dateTime.plusDays(newPlant.value.WaterIntervalTime.toLong())
-                        newPlant.update { it.copy(NextWateringTime = nextwateringTime) }
-                        plantRepository.createPlant(newPlant.value)
-                        newPlant.value = Plant()
+                    val dateTime = LocalDateTime.now()
+                    val nextwateringTime = dateTime.plusDays(newPlant.value.WaterIntervalTime.toLong())
+                    newPlant.update { it.copy(NextWateringTime = nextwateringTime) }
+                    plantRepository.createPlant(newPlant.value)
+                    newPlant.value = Plant()
 
                 }
             }
@@ -85,7 +80,7 @@ class wateringViewModel @Inject constructor(
             }
             is onEvent.deletePlant -> {
                 scope.launch(dispatcher) {
-                        plantRepository.deletePlant(event.plant)
+                    plantRepository.deletePlant(event.plant)
 
                 }
             }
@@ -93,8 +88,8 @@ class wateringViewModel @Inject constructor(
     }
 }
 
-sealed interface plantListState {
-    object Loading : plantListState
-    object Empty: plantListState
-    data class Success(val plantFlow: IsWatered): plantListState
+sealed interface ScreenState {
+    object Loading : ScreenState
+    object Empty: ScreenState
+    object Success: ScreenState
 }

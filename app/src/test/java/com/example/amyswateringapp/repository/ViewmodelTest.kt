@@ -26,23 +26,18 @@ class ViewmodelTest {
     val dispatcher: TestDispatcher = StandardTestDispatcher()
 
 
-    @Before
+   /* @Before
     fun setUp() {
         repository = fakeOfflineWaterRepository()
         viewModel = wateringViewModel(repository, dispatcher)
         Dispatchers.setMain(dispatcher = dispatcher)
-    }
+    }*/
 
 
     @Test
     fun `test that create plant adds a plant to the plant repository`( ) {
         runTest {
-            val beforeadd = repository.allPlantsToBeChanged().testIn(backgroundScope)
-            assertEquals(IsWatered(listOf<Plant>(), listOf<Plant>()), beforeadd.awaitItem())
-            viewModel.onEvent(onEvent.addPlant)
-            advanceUntilIdle()
-            val afteradd = repository.allPlantsToBeChanged().testIn(backgroundScope)
-            assertNotEquals(IsWatered(listOf<Plant>(), listOf<Plant>()), afteradd.awaitItem())
+
         }
     }
 

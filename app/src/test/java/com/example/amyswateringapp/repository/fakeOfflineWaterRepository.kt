@@ -1,12 +1,8 @@
 package com.example.amyswateringapp.repository
 
-import com.example.amyswateringapp.IsWatered
 import com.example.amyswateringapp.Plant
 import com.example.amyswateringapp.features.managePlantsFeature.domain.PlantRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import java.util.*
-
 
 class fakeOfflineWaterRepository: PlantRepository {
 
@@ -16,18 +12,15 @@ class fakeOfflineWaterRepository: PlantRepository {
         plantList.add(plant)
     }
 
-    override fun allPlantsToBeChanged(): Flow<IsWatered> {
-        return flowOf(IsWatered(
-            needsWatering = Collections.unmodifiableList(plantList),
-            doesNotNeedWatering = listOf<Plant>())
-        )
-    }
-
     override suspend fun waterPlant(plant: Plant) {
         plantList
     }
 
     override suspend fun deletePlant(plant: Plant) {
+        TODO("Not yet implemented")
+    }
+
+    override fun allPlants(): Flow<List<Plant>> {
         TODO("Not yet implemented")
     }
 }

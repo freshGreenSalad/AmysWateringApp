@@ -1,6 +1,6 @@
 package com.example.amyswateringapp.DI
 
-import com.example.amyswateringapp.OfflinePlantRepository
+import com.example.amyswateringapp.features.managePlantsFeature.data.OfflinePlantRepository
 import com.example.amyswateringapp.features.managePlantsFeature.domain.PlantRepository
 import dagger.Binds
 import dagger.Module
