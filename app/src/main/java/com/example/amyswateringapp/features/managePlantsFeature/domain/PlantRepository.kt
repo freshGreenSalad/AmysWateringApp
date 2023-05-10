@@ -8,7 +8,9 @@ interface PlantRepository {
 
     fun createPlant(plant: Plant)
 
-    fun allPlants(): Flow<IsWatered>
+    fun allPlantsToBeChanged(): Flow<IsWatered>
+
+    fun allPlants(): Flow<List<Plant>>
 
     suspend fun waterPlant(plant: Plant)
 

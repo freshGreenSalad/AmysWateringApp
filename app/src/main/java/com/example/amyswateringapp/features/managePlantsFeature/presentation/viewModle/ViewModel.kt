@@ -6,6 +6,8 @@ import com.example.amyswateringapp.DI.IoDispatcher
 import com.example.amyswateringapp.IsWatered
 import com.example.amyswateringapp.Plant
 import com.example.amyswateringapp.features.managePlantsFeature.domain.PlantRepository
+import com.example.amyswateringapp.features.managePlantsFeature.domain.usecases.UsecaseGetNotWateredPlants
+import com.example.amyswateringapp.features.managePlantsFeature.domain.usecases.UsecaseGetWateredPlants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
@@ -18,13 +20,26 @@ import javax.inject.Inject
 @HiltViewModel
 class wateringViewModel @Inject constructor(
     private val plantRepository: PlantRepository,
-    @IoDispatcher private val dispatcher: CoroutineDispatcher
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
+    GetWateredPlants: UsecaseGetWateredPlants,
+    GetNotWateredPlants: UsecaseGetNotWateredPlants
 ): ViewModel() {
     private val scope = viewModelScope
 
     val newPlant = MutableStateFlow(Plant())
 
-    val plantsFlow = plantRepository.allPlants()
+    val wateredPlants = GetWateredPlants().stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = WhileSubscribed(5000)
+    )
+    val notWateredPlants = GetNotWateredPlants().stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = WhileSubscribed(5000)
+    )
+
+    val plantsFlow = plantRepository.allPlantsToBeChanged()
         .map {
             if(it.needsWatering.isNullOrEmpty() && it.doesNotNeedWatering.isNullOrEmpty())
             {

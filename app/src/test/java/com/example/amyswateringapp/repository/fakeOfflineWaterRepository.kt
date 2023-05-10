@@ -16,7 +16,7 @@ class fakeOfflineWaterRepository: PlantRepository {
         plantList.add(plant)
     }
 
-    override fun allPlants(): Flow<IsWatered> {
+    override fun allPlantsToBeChanged(): Flow<IsWatered> {
         return flowOf(IsWatered(
             needsWatering = Collections.unmodifiableList(plantList),
             doesNotNeedWatering = listOf<Plant>())

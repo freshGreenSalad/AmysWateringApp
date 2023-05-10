@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.compose.rememberAsyncImagePainter
-import com.example.amyswateringapp.IsWatered
 import com.example.amyswateringapp.Plant
 import com.example.amyswateringapp.R
 import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.plantListState
@@ -49,12 +48,13 @@ import java.time.LocalDateTime
 @Composable
 fun PlantListStates(
     plantFlow: State<plantListState>,
-    waterplant: (Plant) -> Unit, makeItRain:()->Unit,
-    deletePlant:(Plant)->Unit
+    waterplant: (Plant) -> Unit,
+    makeItRain:()->Unit,
+    deletePlant:(Plant)->Unit,
+    wateredPlants: State<List<Plant>>,
+    notWateredPlants: State<List<Plant>>,
 ) {
     Column {
-
-
         val targetState :State<String> = remember{
             derivedStateOf(){
                 when (plantFlow.value){
@@ -73,7 +73,7 @@ fun PlantListStates(
             }
         ) { transitionState ->
             when (transitionState) {
-                 "empty" ->  {
+                "empty" ->  {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(
                             style = MaterialTheme.typography.headlineSmall,
@@ -82,20 +82,23 @@ fun PlantListStates(
                         )
                     }
                 }
-                 "loading" -> {
+                "loading" -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
                 }
-                  "success"   -> {
-                      if(plantFlow.value is plantListState.Success) {
-                              PlantList(
-                                  (plantFlow.value as plantListState.Success).plantFlow,
-                                  waterplant,
-                                  makeItRain = makeItRain,
-                                  deletePlant
-                              )
-                          }
+                "success"   -> {
+                    if(plantFlow.value is plantListState.Success) {
+                        PlantList(
+                            waterplant = {plant ->
+                                waterplant(plant)
+                                makeItRain()
+                                         },
+                            deletePlant,
+                            wateredPlants = wateredPlants,
+                            notWateredPlants = notWateredPlants
+                        )
+                    }
                 }
                 else -> {
                     Text("else")
@@ -108,12 +111,13 @@ fun PlantListStates(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlantList(
-    plantFlow: IsWatered,
     waterplant: (Plant) -> Unit,
-    makeItRain:()->Unit,
-    deletePlant:(Plant)->Unit
+    deletePlant:(Plant)->Unit,
+    wateredPlants: State<List<Plant>>,
+    notWateredPlants: State<List<Plant>>,
 ) {
-    val (WateredPlants, plantsToBeWatered) = plantFlow
+    val wateredPlantsAlready  = wateredPlants.value
+    val plantsToBeWatered = notWateredPlants.value
     val lazyListState = rememberLazyListState()
 
     LazyColumn(
@@ -121,25 +125,25 @@ fun PlantList(
     ){
         stickyHeader {
             when {
-                !plantsToBeWatered.isNullOrEmpty() && !WateredPlants.isNullOrEmpty() -> stickyHeaderText(text = "Plants that need watering")
-                !plantsToBeWatered.isNullOrEmpty() && WateredPlants.isNullOrEmpty()-> {stickyHeaderText(text = "All your plants need watering!")}
-                plantsToBeWatered.isNullOrEmpty() && !WateredPlants.isNullOrEmpty()-> {}
+                plantsToBeWatered.isNotEmpty() && wateredPlantsAlready.isNotEmpty() -> stickyHeaderText(text = "Plants that need watering")
+                plantsToBeWatered.isNotEmpty() -> stickyHeaderText(text = "All your plants need watering!")
+                wateredPlantsAlready.isNotEmpty() -> {}
                 else->{}
             }
         }
-        items(plantsToBeWatered.orEmpty()){plant ->
-            plantCard(plant = plant, waterplant = waterplant, makeItRain = makeItRain, deletePlant)
+        items(plantsToBeWatered){plant ->
+            plantCard(plant = plant, waterplant = { waterplant(plant) }, deletePlant)
         }
         stickyHeader {
             when {
-                !plantsToBeWatered.isNullOrEmpty() && !WateredPlants.isNullOrEmpty() -> stickyHeaderText(text = "Plants that don't need watering")
-                !plantsToBeWatered.isNullOrEmpty() && WateredPlants.isNullOrEmpty()-> {}
-                plantsToBeWatered.isNullOrEmpty() && !WateredPlants.isNullOrEmpty()-> {stickyHeaderText(text = "None of your plants need watering!")}
+                plantsToBeWatered.isNotEmpty() && wateredPlantsAlready.isNotEmpty() -> stickyHeaderText(text = "Plants that don't need watering")
+                plantsToBeWatered.isNotEmpty() -> {}
+                wateredPlantsAlready.isNotEmpty() -> {stickyHeaderText(text = "None of your plants need watering!")}
                 else -> {}
             }
         }
-        items(WateredPlants.orEmpty()){plant ->
-            plantCard(plant = plant, waterplant = waterplant, makeItRain, deletePlant)
+        items(wateredPlantsAlready){ plant ->
+            plantCard(plant = plant, waterplant = { waterplant(plant) }, deletePlant)
         }
     }
 }
@@ -149,51 +153,38 @@ fun PlantList(
 @Composable
 fun plantCard(
     plant:Plant,
-    waterplant:(Plant)->Unit,
-    makeItRain:()->Unit,
+    waterplant:()->Unit,
     deletePlant:(Plant)->Unit
 ) {
     val swipeableState = rememberSwipeableState(0)
     val deleteStateOffset = remember { mutableStateOf(0.dp) }
     Box{
 
-    swipable(
-        deletePlant = { deletePlant(plant) },
-        swipeableState = swipeableState,
-        deleteStateOffset = deleteStateOffset,
-        content = {
-            Box {
-                Row {
-                    plantImage(plant.image)
-                    Column(Modifier.padding(8.dp)) {
-                        Text(text = plant.plantName)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(modifier = Modifier.width(150.dp), text = whenToNextWater(plant))
+        swipable(
+            deletePlant = { deletePlant(plant) },
+            swipeableState = swipeableState,
+            deleteStateOffset = deleteStateOffset,
+            content = {
+                Box {
+                    Row {
+                        plantImage(plant.image)
+                        Column(Modifier.padding(8.dp)) {
+                            Text(text = plant.plantName)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(modifier = Modifier.width(150.dp), text = whenToNextWater(plant))
+                        }
+                        WaterplantButton { waterplant() }
                     }
                 }
             }
-            Box(
-                modifier = Modifier
-                    .size(100.dp)
-                    .background(color = MaterialTheme.colorScheme.secondaryContainer)
-                    .semantics { testTag = "cloudClick" }
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(color = MaterialTheme.colorScheme.onSurface),
-                    ) {
-                        makeItRain()
-                        waterplant(plant)
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                androidx.compose.material.Icon(
-                    modifier = Modifier.size(80.dp),
-                    painter = painterResource(id = R.drawable.cloudy_snowing),
-                    contentDescription = "Water Icon"
-                )
-            }
-        }
-    )
+        )
+        rubishBinIconAnimation(swipeableState) { deleteStateOffset.value = it }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun rubishBinIconAnimation(swipeableState: SwipeableState<Int>, updatestateOffset:(Dp)-> Unit) {
     animatevis(swipeableState = swipeableState) {
         Box(
             Modifier
@@ -228,7 +219,7 @@ fun plantCard(
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = rememberRipple(color = Color.Black)
-                        ) { deleteStateOffset.value = screenWidth },
+                        ) { updatestateOffset( screenWidth) },
                     painter = painterResource(R.drawable.delete),
                     contentDescription = "",
                     tint = Color.Transparent
@@ -236,7 +227,6 @@ fun plantCard(
             }
         }
     }
-}
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -253,6 +243,30 @@ fun animatevis(swipeableState: SwipeableState<Int>, content: @Composable ()->Uni
 
 }
 
+@Composable
+fun WaterplantButton(waterplant:()->Unit) {
+    Box(
+        modifier = Modifier
+            .size(100.dp)
+            .background(color = MaterialTheme.colorScheme.secondaryContainer)
+            .semantics { testTag = "cloudClick" }
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(color = MaterialTheme.colorScheme.onSurface),
+            ) {
+                waterplant()
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        androidx.compose.material.Icon(
+            modifier = Modifier.size(80.dp),
+            painter = painterResource(id = R.drawable.cloudy_snowing),
+            contentDescription = "Water Icon"
+        )
+    }
+}
+
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun swipable(
@@ -263,12 +277,10 @@ fun swipable(
 ) {
     val zIndexOfRubbishIcon = remember { mutableStateOf(0f) }
 
-
     val animateDeleteStateOffset = animateDpAsState(
         targetValue = deleteStateOffset.value,
         finishedListener = { deletePlant() }
     )
-
 
     val dpToPx = with(LocalDensity.current) { 100.dp.toPx() }
 
@@ -283,30 +295,30 @@ fun swipable(
             zIndexOfRubbishIcon.value = 0f
         }
     }
-        Row(
-            modifier = Modifier
-                .zIndex(0.5f)
-                .swipeable(
-                    state = swipeableState, // remembers the current anchor
-                    anchors = anchors, //points where the swipeable child can stop
-                    thresholds = { _, _ -> FractionalThreshold(0.3f) },// how much to move to next anchor
-                    orientation = Orientation.Horizontal // direction of swipe
-                )
-                .semantics { testTag = "plantCard" }
-                .offset(
-                    pxToDp + animateDeleteStateOffset.value,
-                    0.dp
-                )
-                .fillMaxWidth()
-                .padding(8.dp)
-                .shadow(3.dp, shape = RoundedCornerShape(8.dp))
-                .clip(shape = RoundedCornerShape(8.dp))
-                .background(color = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp))
-                .height(100.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            content()
-        }
+    Row(
+        modifier = Modifier
+            .zIndex(0.5f)
+            .swipeable(
+                state = swipeableState, // remembers the current anchor
+                anchors = anchors, //points where the swipeable child can stop
+                thresholds = { _, _ -> FractionalThreshold(0.3f) },// how much to move to next anchor
+                orientation = Orientation.Horizontal // direction of swipe
+            )
+            .semantics { testTag = "plantCard" }
+            .offset(
+                pxToDp + animateDeleteStateOffset.value,
+                0.dp
+            )
+            .fillMaxWidth()
+            .padding(8.dp)
+            .shadow(3.dp, shape = RoundedCornerShape(8.dp))
+            .clip(shape = RoundedCornerShape(8.dp))
+            .background(color = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp))
+            .height(100.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        content()
+    }
 
 }
 
@@ -353,7 +365,7 @@ fun previewplantCard() {
             Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)) {
-            plantCard(plant, {},{},{})
+            plantCard(plant, {},{})
         }
     }
 }

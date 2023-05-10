@@ -21,6 +21,7 @@ import com.example.amyswateringapp.features.managePlantsFeature.presentation.vie
 import com.example.amyswateringapp.wateringAppScreen.AddPlantFab
 import com.example.amyswateringapp.wateringAppScreen.PlantListStates
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 
@@ -28,12 +29,19 @@ import kotlinx.coroutines.launch
 fun WateringAppHome(
     viewModel: wateringViewModel = hiltViewModel()
 ) {
+    val wateredPlants = viewModel.wateredPlants.collectAsStateWithLifecycle()
+    val notWateredPlants = viewModel.notWateredPlants.collectAsStateWithLifecycle()
+
     val newPlantState = viewModel.newPlant.collectAsStateWithLifecycle()
     val plantFlow = viewModel.plantsFlow.collectAsStateWithLifecycle()
+
     WateringAppHomeScaffold(
-        newPlantState,
-        plantFlow,
-    ) { event -> (viewModel::onEvent)(event) }
+        newPlantState = newPlantState,
+        plantFlow = plantFlow,
+     event = { event -> (viewModel::onEvent)(event) },
+        wateredPlants = wateredPlants,
+        notWateredPlants = notWateredPlants
+    )
 }
 
 @Composable
@@ -41,6 +49,8 @@ fun WateringAppHomeScaffold(
     newPlantState: State<Plant>,
     plantFlow: State<plantListState>,
     event: (onEvent)->Unit,
+    wateredPlants: State<List<Plant>>,
+    notWateredPlants: State<List<Plant>>,
 ) {
 
     val showAddPlantDialog = remember { mutableStateOf(false) }
@@ -54,13 +64,17 @@ fun WateringAppHomeScaffold(
         val scope = rememberCoroutineScope()
         val showGraphic = remember { mutableStateOf(false) }
 
-        Column(Modifier.padding(it).fillMaxSize()) {
-
+        Column(
+            Modifier
+                .padding(it)
+                .fillMaxSize()) {
             PlantListStates(
                 plantFlow = plantFlow,
                 waterplant =  { plant -> event(onEvent.waterPlant(plant)) },
                 makeItRain = {showGraphic.value = true},
-                deletePlant = {plant -> event(onEvent.deletePlant(plant))}
+                deletePlant = {plant -> event(onEvent.deletePlant(plant))},
+                wateredPlants = wateredPlants,
+                notWateredPlants = notWateredPlants,
             )
 
             if (showAddPlantDialog.value){

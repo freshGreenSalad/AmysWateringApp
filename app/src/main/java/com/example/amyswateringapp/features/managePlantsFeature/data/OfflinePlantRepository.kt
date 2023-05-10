@@ -8,16 +8,18 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 class OfflinePlantRepository @Inject constructor(
-    val wateringDao: WateringDao
+    private val wateringDao: WateringDao
 ): PlantRepository {
 
     override fun createPlant(plant: Plant) {
         wateringDao.insertAll(plant)
     }
 
-    override fun allPlants(): Flow<IsWatered> = wateringDao.getall() .map { PlantList ->
+    override fun allPlantsToBeChanged(): Flow<IsWatered> = wateringDao.getall() .map { PlantList ->
         returnIsWatered(PlantList)
     }
+
+    override fun allPlants(): Flow<List<Plant>> = wateringDao.getall()
 
     override suspend fun waterPlant(plant: Plant) {
         val newplant = plant.copy(NextWateringTime = LocalDateTime.now().plusDays(plant.WaterIntervalTime.toLong()))
