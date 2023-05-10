@@ -17,7 +17,7 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
-class wateringViewModel @Inject constructor(
+class WateringViewModel @Inject constructor(
     private val plantRepository: PlantRepository,
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
     GetWateredPlants: UsecaseGetWateredPlants,
@@ -46,13 +46,13 @@ class wateringViewModel @Inject constructor(
             }
         }.stateIn(
             initialValue = ScreenState.Loading,
-            scope = viewModelScope, //TODO("change to dispatcher")
+            scope = viewModelScope,
             started = WhileSubscribed(5000)
         )
 
-    fun onEvent(event: onEvent){
+    fun onEvent(event: OnEvent){
         when(event){
-            is onEvent.addPlant -> {
+            is OnEvent.AddPlant -> {
                 scope.launch(dispatcher) {
                     val dateTime = LocalDateTime.now()
                     val nextwateringTime = dateTime.plusDays(newPlant.value.WaterIntervalTime.toLong())
@@ -62,23 +62,23 @@ class wateringViewModel @Inject constructor(
 
                 }
             }
-            is onEvent.updatePlantName -> {
+            is OnEvent.UpdatePlantName -> {
                 newPlant.update { it.copy(plantName = event.name) }
             }
-            is onEvent.updatePlantPhoto -> {
+            is OnEvent.UpdatePlantPhoto -> {
                 newPlant.update { it.copy(image = event.photoUri) }
             }
-            is onEvent.updatePlantwateringInterval -> {
+            is OnEvent.UpdatePlantWateringInterval -> {
                 newPlant.update { it.copy(WaterIntervalTime = event.days) }
             }
-            is onEvent.waterPlant -> {
+            is OnEvent.WaterPlant -> {
                 scope.launch {
                     withContext(dispatcher) {
                         plantRepository.waterPlant(event.plant)
                     }
                 }
             }
-            is onEvent.deletePlant -> {
+            is OnEvent.DeletePlant -> {
                 scope.launch(dispatcher) {
                     plantRepository.deletePlant(event.plant)
 

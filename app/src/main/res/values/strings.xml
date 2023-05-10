@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">AmysWateringApp</string>
+    <string name="howManydaysBeforeWatering">How Many Days Between Watering?</string>
+    <string name="WhatIsYourPlantsName">What is your Plant Name?</string>
+    <string name="confirm">Confirm</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="addAPlant">Add A Plant!</string>
+    <string name="PickAPhoto">Pick a photo</string>
+    <string name="TakeAPhoto">Take a photo</string>
+    <string name="addNameFirst">You need to add a name before you can take a photo</string>
+    <string name="youDontHavePlantsYet">You don\'t have any plants yet</string>
+    <string name="PlantsThatDontNeedWatering">Plants that don\'t need watering</string>
+    <string name="NoneOfYourPlantsNeedWatering">None of your plants need watering!</string>
+    <string name="PlantsThatNeedWatering">Plants that need watering</string>
+    <string name="AllYourPlantsNeedWatering">All your plants need watering!</string>
 </resources>

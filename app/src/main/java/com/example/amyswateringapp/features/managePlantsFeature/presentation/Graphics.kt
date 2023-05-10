@@ -4,7 +4,6 @@ package com.example.amyswateringapp.features.managePlantsFeature.presentation
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -12,16 +11,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.amyswateringapp.common.presentation.theme.AmysWateringAppTheme
+import com.example.amyswateringapp.features.managePlantsFeature.domain.models.Rain
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 @Composable
-fun graphics() {
+fun RainGraphic() {
     val scope = rememberCoroutineScope()
 
     val state = remember{mutableStateOf(0f)}
@@ -36,7 +32,7 @@ fun graphics() {
 
     val blue = Color(0xFFd4e3ff)
     val dBlue = Color(0xFFd8e3f8)
-    val list: MutableList<Rain> = remember { mutableListOf<Rain>() }
+    val list: MutableList<Rain> = remember { mutableListOf() }
 
     repeat(75){
         val y = Random.nextFloat()
@@ -49,7 +45,6 @@ fun graphics() {
     Box(
         Modifier
             .fillMaxSize()
-            .semantics { testTag = "cloud" }
             .drawWithContent {
                 drawContent()
                 list.forEach {rain ->
@@ -86,19 +81,4 @@ fun DrawScope.drawRain(rps: State<Float>, color: Color, y:Float, x: Float ){
         strokeWidth = 20f,
         cap = StrokeCap.Round
     )
-}
-
-data class Rain(
-    val rpf: State<Float>,
-    val color: Color,
-    val y:Float,
-    val x: Float
-)
-
-@Preview
-@Composable
-fun previewGraphics() {
-    AmysWateringAppTheme {
-        graphics()
-    }
 }

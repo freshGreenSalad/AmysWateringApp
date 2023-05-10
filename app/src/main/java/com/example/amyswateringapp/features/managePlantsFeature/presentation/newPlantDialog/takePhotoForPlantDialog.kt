@@ -19,7 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.example.amyswateringapp.Plant
+import com.example.amyswateringapp.R
 import com.example.amyswateringapp.common.presentation.permission
 import com.example.amyswateringapp.features.managePlantsFeature.data.MediaStoreFunctions
 
@@ -47,7 +49,7 @@ fun SetPlantPhotoButtons(
                 CameraComposable(launcher)
                 exitLauncher()
             },
-            clickableComposable = {click -> cameraButton(click, enabled.value) }
+            clickableComposable = {click -> CameraButton(click, enabled.value) }
         )
     }
 }
@@ -69,30 +71,30 @@ fun PhotoPickerButton(updatePlantUri: (Uri) -> Unit, enabled: Boolean) {
         },
         enabled = enabled
     ) {
-        Text("Pick a photo")
+        Text(stringResource(R.string.PickAPhoto))
     }
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun cameraButton(onClick:()->Unit, enabled: Boolean) {
+fun CameraButton(onClick:()->Unit, enabled: Boolean) {
 
     if (enabled){
         FilledTonalButton(
             modifier = Modifier.focusable(),
             onClick = { onClick()},
         ) {
-            Text("Take a photo")
+            Text(stringResource(R.string.TakeAPhoto))
         }
     } else {
-        PlainTooltipBox(tooltip = { Text("You need to add a name before you can take a photo") }) {
+        PlainTooltipBox(tooltip = { Text(stringResource(R.string.addNameFirst)) }) {
             FilledTonalButton(
                 modifier = Modifier.focusable(),
                 onClick = {},
                 enabled = false
             ) {
-                Text("Take a photo")
+                Text(stringResource(R.string.TakeAPhoto))
             }
         }
     }

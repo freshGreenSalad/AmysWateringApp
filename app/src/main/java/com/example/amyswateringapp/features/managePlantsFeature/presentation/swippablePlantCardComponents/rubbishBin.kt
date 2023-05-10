@@ -22,8 +22,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -39,8 +37,7 @@ fun RubbishBinIconAnimation(swipeableState: SwipeableState<Int>, updateStateOffs
     AnimateBinVisibility(swipeableState = swipeableState) {
         Box(
             Modifier
-                .size(100.dp)
-                .semantics { testTag = "bin" },
+                .size(100.dp),
             contentAlignment = Alignment.Center
         ) {
             Icon(

@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.features.managePlantsFeature.presentation
+package com.example.amyswateringapp.features.managePlantsFeature.presentation.swippablePlantCardComponents
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -13,16 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.amyswateringapp.Plant
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.RubbishBinIconAnimation
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun plantCardSwipableWithBin(
+fun PlantCardSwipeableWithBin(
     plant: Plant,
     waterPlant:()->Unit,
     deletePlant:(Plant)->Unit
@@ -30,11 +29,11 @@ fun plantCardSwipableWithBin(
     val swipeableState = rememberSwipeableState(0)
     Box {// box is required to keep rubbish bin icon on same line
         val deleteStateOffset = remember { mutableStateOf(0.dp) }
-        swipable(
+        Swipeable(
             deletePlant = { deletePlant(plant) },
             swipeableState = swipeableState,
             deleteStateOffset = deleteStateOffset,
-            content = {PlantCard(plant, waterPlant)}
+            content = { PlantCard(plant, waterPlant) }
         )
         RubbishBinIconAnimation(swipeableState) { deleteStateOffset.value = it }
     }
@@ -42,8 +41,8 @@ fun plantCardSwipableWithBin(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun swipable(
-    content: @Composable() ()-> Unit,
+fun Swipeable(
+    content: @Composable ()-> Unit,
     deletePlant: () -> Unit,
     deleteStateOffset: MutableState<Dp>,
     swipeableState: SwipeableState<Int>
@@ -51,7 +50,7 @@ fun swipable(
     val zIndexOfRubbishIcon = remember { mutableStateOf(0f) }
     val dpToPx = with(LocalDensity.current) { 100.dp.toPx() }
     val pxToDp = with(LocalDensity.current) { swipeableState.offset.value.toDp() }
-    val anchors = mapOf(0f to 0, dpToPx to 1,)
+    val anchors = mapOf(0f to 0, dpToPx to 1)
 
     val animateDeleteStateOffset = animateDpAsState(
         targetValue = deleteStateOffset.value,
@@ -74,7 +73,6 @@ fun swipable(
                 thresholds = { _, _ -> FractionalThreshold(0.3f) },// how much to move to next anchor
                 orientation = Orientation.Horizontal // direction of swipe
             )
-            .semantics { testTag = "plantCard" }
             .offset(
                 pxToDp + animateDeleteStateOffset.value,
                 0.dp

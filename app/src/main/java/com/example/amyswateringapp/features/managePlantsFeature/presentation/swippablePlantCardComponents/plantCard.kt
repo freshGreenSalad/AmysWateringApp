@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.features.managePlantsFeature.presentation
+package com.example.amyswateringapp.features.managePlantsFeature.presentation.swippablePlantCardComponents
 
 import android.net.Uri
 import androidx.compose.foundation.Image
@@ -15,8 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.amyswateringapp.Plant
@@ -44,7 +42,6 @@ fun WaterPlantButton(waterPlant:()->Unit) {
         modifier = Modifier
             .size(100.dp)
             .background(color = MaterialTheme.colorScheme.secondaryContainer)
-            .semantics { testTag = "cloudClick" }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = MaterialTheme.colorScheme.onSurface),

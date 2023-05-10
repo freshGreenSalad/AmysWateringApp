@@ -7,7 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.res.stringResource
 import com.example.amyswateringapp.Plant
+import com.example.amyswateringapp.R
 import com.example.amyswateringapp.common.presentation.MyKeyboards
 
 @Composable
@@ -17,7 +19,7 @@ fun PlantNameTextField(
     focusManager: FocusManager
 ) {
     OutlinedTextField(
-        placeholder = { Text(text = "What is your Plant Name?") },
+        placeholder = { Text(text = stringResource(R.string.WhatIsYourPlantsName)) },
         value = plant.value.plantName,
         onValueChange = { updateNewPlantName(it) },
         keyboardOptions = MyKeyboards().StringKeyBoard,
@@ -34,7 +36,7 @@ fun PlantWateringTimeTextField(
     focusManager: FocusManager
 ) {
     OutlinedTextField(
-        placeholder = { Text(text = "How Many Days Between Watering?") },
+        placeholder = { Text(text = stringResource(R.string.howManydaysBeforeWatering)) },
         value = if(plant.value.WaterIntervalTime == 0){""}
         else{plant.value.WaterIntervalTime.toString()},
         onValueChange = {

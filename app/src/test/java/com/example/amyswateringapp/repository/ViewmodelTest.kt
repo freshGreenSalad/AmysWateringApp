@@ -1,19 +1,13 @@
 package com.example.amyswateringapp.repository
 
-import app.cash.turbine.testIn
-import com.example.amyswateringapp.IsWatered
-import com.example.amyswateringapp.Plant
+
 import com.example.amyswateringapp.features.managePlantsFeature.domain.PlantRepository
-import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.onEvent
-import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.wateringViewModel
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.WateringViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
 
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -21,7 +15,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class ViewmodelTest {
-    lateinit var viewModel: wateringViewModel
+    lateinit var viewModel: WateringViewModel
     lateinit var repository: PlantRepository
     val dispatcher: TestDispatcher = StandardTestDispatcher()
 

@@ -10,10 +10,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.amyswateringapp.Plant
+import com.example.amyswateringapp.R
 import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.ScreenState
-import com.example.amyswateringapp.features.managePlantsFeature.presentation.plantCardSwipableWithBin
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.swippablePlantCardComponents.PlantCardSwipeableWithBin
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -57,7 +59,7 @@ fun EmptyPlantScreen() {
         Text(
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.alpha(0.75f),
-            text = "You don't have any plants yet"
+            text = stringResource(R.string.youDontHavePlantsYet)
         )
     }
 }
@@ -85,11 +87,11 @@ fun PlantList(
     ){
         notWateredPlantsStickyHeader(wateredPlantsAlready,plantsToBeWatered)
         items(plantsToBeWatered){plant ->
-            plantCardSwipableWithBin(plant = plant, waterPlant = { waterPlant(plant) }, deletePlant)
+            PlantCardSwipeableWithBin(plant = plant, waterPlant = { waterPlant(plant) }, deletePlant)
         }
         wateredPlantsStickyHeader(wateredPlantsAlready,plantsToBeWatered)
         items(wateredPlantsAlready){ plant ->
-            plantCardSwipableWithBin(plant = plant, waterPlant = { waterPlant(plant) }, deletePlant)
+            PlantCardSwipeableWithBin(plant = plant, waterPlant = { waterPlant(plant) }, deletePlant)
         }
     }
 }
@@ -98,9 +100,9 @@ fun PlantList(
 fun LazyListScope.wateredPlantsStickyHeader(wateredPlantsAlready: List<Plant>, plantsToBeWatered: List<Plant>) {
     stickyHeader {
         when {
-            plantsToBeWatered.isNotEmpty() && wateredPlantsAlready.isNotEmpty() -> StickyHeaderText(text = "Plants that don't need watering")
+            plantsToBeWatered.isNotEmpty() && wateredPlantsAlready.isNotEmpty() -> StickyHeaderText(text = stringResource(R.string.PlantsThatDontNeedWatering))
             plantsToBeWatered.isNotEmpty() -> {}
-            wateredPlantsAlready.isNotEmpty() -> {StickyHeaderText(text = "None of your plants need watering!")}
+            wateredPlantsAlready.isNotEmpty() -> {StickyHeaderText(text = stringResource(R.string.NoneOfYourPlantsNeedWatering))}
             else -> {}
         }
     }
@@ -110,8 +112,9 @@ fun LazyListScope.wateredPlantsStickyHeader(wateredPlantsAlready: List<Plant>, p
 fun LazyListScope.notWateredPlantsStickyHeader(wateredPlantsAlready: List<Plant>, plantsToBeWatered: List<Plant>) {
     stickyHeader {
         when {
-            plantsToBeWatered.isNotEmpty() && wateredPlantsAlready.isNotEmpty() -> StickyHeaderText(text = "Plants that need watering")
-            plantsToBeWatered.isNotEmpty() -> StickyHeaderText(text = "All your plants need watering!")
+            plantsToBeWatered.isNotEmpty() && wateredPlantsAlready.isNotEmpty() -> StickyHeaderText(text = stringResource(
+                            R.string.PlantsThatNeedWatering))
+            plantsToBeWatered.isNotEmpty() -> StickyHeaderText(text = stringResource(R.string.AllYourPlantsNeedWatering))
             wateredPlantsAlready.isNotEmpty() -> {}
             else->{}
         }

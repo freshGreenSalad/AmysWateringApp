@@ -14,10 +14,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.amyswateringapp.*
-import com.example.amyswateringapp.features.managePlantsFeature.presentation.newPlantDialog.addPlantDialog
-import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.onEvent
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.newPlantDialog.AddPlantDialog
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.OnEvent
 import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.ScreenState
-import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.wateringViewModel
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.viewModle.WateringViewModel
 import com.example.amyswateringapp.wateringAppScreen.AddPlantFab
 import com.example.amyswateringapp.wateringAppScreen.PlantListStates
 import kotlinx.coroutines.delay
@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun WateringAppHome(
-    viewModel: wateringViewModel = hiltViewModel()
+    viewModel: WateringViewModel = hiltViewModel()
 ) {
     WateringAppHomeScaffold(
         newPlantState = viewModel.newPlant.collectAsStateWithLifecycle(),
@@ -40,7 +40,7 @@ fun WateringAppHome(
 fun WateringAppHomeScaffold(
     newPlantState: State<Plant>,
     screenState: State<ScreenState>,
-    event: (onEvent)->Unit,
+    event: (OnEvent)->Unit,
     wateredPlants: State<List<Plant>>,
     notWateredPlants: State<List<Plant>>,
 ) {
@@ -59,27 +59,27 @@ fun WateringAppHomeScaffold(
         ) {
             PlantListStates(
                 screenState = screenState,
-                waterPlant = { plant -> event(onEvent.waterPlant(plant)) },
+                waterPlant = { plant -> event(OnEvent.WaterPlant(plant)) },
                 makeItRain = { showGraphic.value = true },
-                deletePlant = { plant -> event(onEvent.deletePlant(plant)) },
+                deletePlant = { plant -> event(OnEvent.DeletePlant(plant)) },
                 wateredPlants = wateredPlants,
                 notWateredPlants = notWateredPlants,
             )
 
             if (showAddPlantDialog.value) {
-                addPlantDialog(
+                AddPlantDialog(
                     ShowAddPlantDialog = { showAddPlantDialog.value = !showAddPlantDialog.value },
                     plant = newPlantState,
-                    updateNewPlantName = { plantName -> event(onEvent.updatePlantName(plantName)) },
+                    updateNewPlantName = { plantName -> event(OnEvent.UpdatePlantName(plantName)) },
                     updateNewPlantWateringTime = { wateringTime ->
                         event(
-                            onEvent.updatePlantwateringInterval(
+                            OnEvent.UpdatePlantWateringInterval(
                                 wateringTime
                             )
                         )
                     },
-                    updatePlantUri = { uri -> event(onEvent.updatePlantPhoto(uri)) },
-                    createPlant = { event(onEvent.addPlant) }
+                    updatePlantUri = { uri -> event(OnEvent.UpdatePlantPhoto(uri)) },
+                    createPlant = { event(OnEvent.AddPlant) }
                 )
             }
         }
@@ -91,7 +91,7 @@ fun WateringAppHomeScaffold(
         enter = fadeIn(tween(200)),
         exit = fadeOut(tween(200))
     ) {
-        graphics()
+        RainGraphic()
         LaunchedEffect(key1 = true){
             scope.launch {
                 delay(1000)

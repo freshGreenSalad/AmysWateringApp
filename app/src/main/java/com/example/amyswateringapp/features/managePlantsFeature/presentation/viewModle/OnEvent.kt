@@ -3,11 +3,11 @@ package com.example.amyswateringapp.features.managePlantsFeature.presentation.vi
 import android.net.Uri
 import com.example.amyswateringapp.Plant
 
-sealed interface onEvent{
-    object addPlant: onEvent
-    data class updatePlantName(val name: String): onEvent
-    data class updatePlantPhoto(val photoUri: Uri): onEvent
-    data class updatePlantwateringInterval(val days: Int): onEvent
-    data class waterPlant(val plant: Plant): onEvent
-    data class deletePlant(val plant: Plant): onEvent
+sealed interface OnEvent{
+    object AddPlant: OnEvent
+    data class UpdatePlantName(val name: String): OnEvent
+    data class UpdatePlantPhoto(val photoUri: Uri): OnEvent
+    data class UpdatePlantWateringInterval(val days: Int): OnEvent
+    data class WaterPlant(val plant: Plant): OnEvent
+    data class DeletePlant(val plant: Plant): OnEvent
 }

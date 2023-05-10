@@ -7,13 +7,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.amyswateringapp.Plant
+import com.example.amyswateringapp.R
 
 @Composable
-fun addPlantDialog(
+fun AddPlantDialog(
     ShowAddPlantDialog: () ->Unit,
     plant: State<Plant>,
     updateNewPlantName: (String)->Unit,
@@ -39,11 +39,11 @@ fun addPlantDialog(
                 ShowAddPlantDialog()
             },
                 enabled = enabled.value
-            ) { Text("Confirm") }
+            ) { Text(stringResource(R.string.confirm)) }
         },
         dismissButton = {
             TextButton(onClick = {onDismiss()})
-            { Text("Dismiss") }
+            { Text(stringResource(R.string.dismiss)) }
         },
         text = {
             ContentsOfDialog(plant, updateNewPlantName,updateNewPlantWateringTime,updatePlantUri, enabled)
@@ -62,7 +62,6 @@ fun ContentsOfDialog(
     val focusManager = LocalFocusManager.current
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.semantics { testTag = "addPlantDialog" }
     ) {
         DialogHeading()
         Spacer(Modifier.height(16.dp))
@@ -77,6 +76,6 @@ fun ContentsOfDialog(
 @Composable
 fun DialogHeading() {
     Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
-        Text(text = "Add A Plant!", style = MaterialTheme.typography.headlineMedium)
+        Text(text = stringResource(R.string.addAPlant), style = MaterialTheme.typography.headlineMedium)
     }
 }
