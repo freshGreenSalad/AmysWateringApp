@@ -30,13 +30,13 @@ import com.example.amyswateringapp.R
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun RubbishBinIconAnimation(swipeableState: SwipeableState<Int>, updateStateOffset:(Dp)-> Unit) {
+fun RubbishBinIconAnimationRed(swipeableState: SwipeableState<Int>, modifier: Modifier = Modifier) {
 
     val screenWidth = LocalConfiguration.current.screenHeightDp.dp
 
     AnimateBinVisibility(swipeableState = swipeableState) {
         Box(
-            Modifier
+            modifier
                 .size(100.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -49,9 +49,17 @@ fun RubbishBinIconAnimation(swipeableState: SwipeableState<Int>, updateStateOffs
             )
         }
     }
+}
+
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun RubbishBinIconAnimationTransperant(swipeableState: SwipeableState<Int>, updateStateOffset:(Dp)-> Unit, modifier: Modifier = Modifier) {
+    val screenWidth = LocalConfiguration.current.screenHeightDp.dp
+
     AnimateBinVisibility(swipeableState = swipeableState) {
         Box(
-            Modifier.size(100.dp),
+            modifier.size(100.dp),
             contentAlignment = Alignment.Center
         ) {
 

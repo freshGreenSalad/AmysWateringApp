@@ -17,7 +17,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.amyswateringapp.Plant
-import com.example.amyswateringapp.features.managePlantsFeature.presentation.RubbishBinIconAnimation
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.RubbishBinIconAnimationRed
+import com.example.amyswateringapp.features.managePlantsFeature.presentation.RubbishBinIconAnimationTransperant
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -29,13 +30,16 @@ fun PlantCardSwipeableWithBin(
     val swipeableState = rememberSwipeableState(0)
     Box {// box is required to keep rubbish bin icon on same line
         val deleteStateOffset = remember { mutableStateOf(0.dp) }
+        RubbishBinIconAnimationRed(swipeableState, Modifier.zIndex(0f))
         Swipeable(
             deletePlant = { deletePlant(plant) },
             swipeableState = swipeableState,
             deleteStateOffset = deleteStateOffset,
-            content = { PlantCard(plant, waterPlant) }
+            content = { PlantCard(plant, waterPlant) },
+            modifier = Modifier.zIndex(0.5f)
         )
-        RubbishBinIconAnimation(swipeableState) { deleteStateOffset.value = it }
+        RubbishBinIconAnimationTransperant(swipeableState, modifier = Modifier.zIndex(1f), updateStateOffset = { deleteStateOffset.value = it })
+
     }
 }
 
@@ -45,7 +49,8 @@ fun Swipeable(
     content: @Composable ()-> Unit,
     deletePlant: () -> Unit,
     deleteStateOffset: MutableState<Dp>,
-    swipeableState: SwipeableState<Int>
+    swipeableState: SwipeableState<Int>,
+    modifier: Modifier = Modifier
 ) {
     val zIndexOfRubbishIcon = remember { mutableStateOf(0f) }
     val dpToPx = with(LocalDensity.current) { 100.dp.toPx() }
@@ -65,7 +70,7 @@ fun Swipeable(
         }
     }
     Row(
-        modifier = Modifier
+        modifier = modifier
             .zIndex(0.5f)
             .swipeable(
                 state = swipeableState, // remembers the current anchor
