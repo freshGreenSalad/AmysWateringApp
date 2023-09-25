@@ -24,7 +24,7 @@ android {
         }
     }
     namespace = "com.example.amyswateringapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.smallzy.amyswateringapp"
@@ -80,70 +80,65 @@ android {
 
 
 dependencies {
-    implementation(platform("androidx.compose:compose-bom:2023.01.00"))
-    implementation (libs.androidx.core.ktx)
-    implementation (libs.lifecycle.runtime.ktx)
-    implementation("androidx.activity:activity-compose:1.3.1")
 
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.animation:animation-graphics")
-
-    implementation("androidx.compose.material3:material3:1.1.0-alpha08")
-    implementation("androidx.compose.material:material:1.3.1")
-
-
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.robolectric:robolectric:4.9")
-
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.3.3")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(platform("androidx.compose:compose-bom:2023.01.00"))
 
-    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation (libs.androidx.core.ktx)
+    implementation (libs.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.material3)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0-Beta")
+    implementation(libs.androidx.material)
+    testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
 
-    val dagger_version = "2.48"
-    implementation("com.google.dagger:hilt-android:$dagger_version")
-    kapt("com.google.dagger:hilt-compiler:$dagger_version")
-
-    androidTestImplementation("com.google.dagger:hilt-android-testing:$dagger_version")
-    kaptAndroidTest("com.google.dagger:hilt-compiler:$dagger_version")
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
 
 
-    testImplementation("com.google.dagger:hilt-android-testing:$dagger_version")
-    kaptTest("com.google.dagger:hilt-compiler:$dagger_version")
+    implementation(libs.coil.compose)
 
-    testImplementation("app.cash.turbine:turbine:0.12.3")
-    testImplementation("com.google.truth:truth:1.1.3")
+    implementation(libs.kotlinx.coroutines.android)
+    testImplementation(libs.kotlinx.coroutines.test)
 
-    val lifecycle_version = "2.6.1"
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version")
 
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    kaptTest(libs.hilt.compiler)
+    kaptAndroidTest(libs.hilt.compiler)
+    testImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.hilt.android.testing)
 
-    val room_version = "2.5.0"
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
-    testImplementation("androidx.room:room-testing:$room_version")
-    implementation("androidx.room:room-paging:$room_version")
+    testImplementation(libs.turbine)
+    testImplementation(libs.truth)
+
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.savedstate)
+
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    testImplementation(libs.androidx.room.testing)
+    implementation(libs.androidx.room.paging)
 
     val work_version = "2.8.0"
-    implementation("androidx.work:work-runtime-ktx:$work_version")
-    androidTestImplementation("androidx.work:work-testing:$work_version")
-    implementation("androidx.work:work-multiprocess:$work_version")
-    implementation("androidx.compose.runtime:runtime-livedata:1.3.3")
+    implementation(libs.androidx.work.runtime.ktx)
+    androidTestImplementation(libs.androidx.work.testing)
+    implementation(libs.androidx.work.multiprocess)
+    implementation(libs.androidx.runtime.livedata)
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    implementation("androidx.browser:browser:1.5.0")
+    implementation(libs.androidx.browser)
 }

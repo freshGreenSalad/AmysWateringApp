@@ -30,7 +30,9 @@ class MediaStoreFunctions {
 
             val uri = contentResolver.insert(collection, photoData)?.also { uri ->
                 contentResolver.openOutputStream(uri).use { stream ->
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream)
+                    if (stream != null){
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream)
+                    }
                 }
             }
             uri!!
