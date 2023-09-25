@@ -1,22 +1,26 @@
+import java.io.FileInputStream
+import java.util.*
+
+
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.kapt")
+    id("kotlin-android")
+    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
 val keystoreProperties = Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
 android {
     signingConfigs {
         register("release") {
-            keyAlias = keystorePropertieslistOf("keyAlias")
-            keyPassword = keystorePropertieslistOf("keyPassword")
-            storeFile = file(keystorePropertieslistOf("storeFile"))
-            storePassword = keystorePropertieslistOf("storePassword")
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+            storeFile = file(keystoreProperties.getProperty("storeFile"))
+            storePassword = keystoreProperties.getProperty("storePassword")
         }
     }
     namespace = "com.example.amyswateringapp"
@@ -40,10 +44,9 @@ android {
         named("release") {
             isMinifyEnabled = true
             isShrinkResources = true
-            setProguardFiles(listOf(getDefaultProguardFile())
-                    "proguard-android-optimize.txt"),
-            "proguard-rules.pro"
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+
         named("debug") {
             applicationIdSuffix = ".debug"
             isDebuggable = true
@@ -61,7 +64,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.2"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packagingOptions {
         resources {
@@ -70,7 +73,7 @@ android {
     }
     testOptions {
         unitTests {
-            includeAndroidResources = true
+            isIncludeAndroidResources = true
         }
     }
 }
@@ -78,15 +81,17 @@ android {
 
 dependencies {
     implementation(platform("androidx.compose:compose-bom:2023.01.00"))
-
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    implementation (libs.androidx.core.ktx)
+    implementation (libs.lifecycle.runtime.ktx)
     implementation("androidx.activity:activity-compose:1.3.1")
+
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.animation:animation-graphics")
+
     implementation("androidx.compose.material3:material3:1.1.0-alpha08")
     implementation("androidx.compose.material:material:1.3.1")
-    implementation("androidx.compose.animation:animation-graphics")
+
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.9")
@@ -99,11 +104,10 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:2.2.2")
 
-    val coroutines_version  = "1.6.4"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0-Beta")
 
-    val dagger_version = "2.44.2"
+    val dagger_version = "2.48"
     implementation("com.google.dagger:hilt-android:$dagger_version")
     kapt("com.google.dagger:hilt-compiler:$dagger_version")
 

@@ -1,0 +1,7 @@
+[versions]
+androidxCore = "1.7.0"
+androidx.lifecycle = "2.3.1"
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidxCore" }
+[plugins]
