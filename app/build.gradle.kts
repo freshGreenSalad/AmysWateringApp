@@ -78,35 +78,31 @@ android {
     }
 }
 
-
 dependencies {
-
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.animation:animation-graphics")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation(platform("androidx.compose:compose-bom:2023.01.00"))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.material3)
+    implementation(libs.coil.compose)
+    implementation(libs.androidx.material)
 
     implementation (libs.androidx.core.ktx)
     implementation (libs.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.material3)
 
-    implementation(libs.androidx.material)
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
-
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
-
-    implementation(libs.coil.compose)
-
     implementation(libs.kotlinx.coroutines.android)
     testImplementation(libs.kotlinx.coroutines.test)
-
+    testImplementation(libs.turbine)
+    testImplementation(libs.truth)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
@@ -114,16 +110,12 @@ dependencies {
     kaptAndroidTest(libs.hilt.compiler)
     testImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.hilt.android.testing)
-
-    testImplementation(libs.turbine)
-    testImplementation(libs.truth)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.savedstate)
-
-    implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
@@ -132,7 +124,6 @@ dependencies {
     testImplementation(libs.androidx.room.testing)
     implementation(libs.androidx.room.paging)
 
-    val work_version = "2.8.0"
     implementation(libs.androidx.work.runtime.ktx)
     androidTestImplementation(libs.androidx.work.testing)
     implementation(libs.androidx.work.multiprocess)
