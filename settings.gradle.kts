@@ -1,4 +1,3 @@
-
 pluginManagement {
     //includeBuild("build-logic") add this if you want tho have the build logic top level folder like in nia
     repositories {
@@ -23,3 +22,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "AmysWateringApp"
 include(":app")
+include(":build-logic:lib")

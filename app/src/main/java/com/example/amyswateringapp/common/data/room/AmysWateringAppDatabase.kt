@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.common.data.Room
+package com.example.amyswateringapp.common.data.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -14,6 +14,6 @@ import com.example.amyswateringapp.UriConverters
 
 @TypeConverters(UriConverters::class, LocalDateTimeConverter::class)
 
-abstract class amysWateringAppDatabase:RoomDatabase() {
+abstract class AmysWateringAppDatabase:RoomDatabase() {
     abstract fun wateringDao(): WateringDao
 }

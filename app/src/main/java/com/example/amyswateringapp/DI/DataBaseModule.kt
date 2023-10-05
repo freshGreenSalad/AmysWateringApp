@@ -2,7 +2,7 @@ package com.example.amyswateringapp.DI
 
 import android.content.Context
 import androidx.room.Room
-import com.example.amyswateringapp.common.data.Room.amysWateringAppDatabase
+import com.example.amyswateringapp.common.data.room.AmysWateringAppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,10 +17,10 @@ object DataBaseModule {
 
     @Provides
     @Singleton
-    fun providesDatabase(@ApplicationContext context: Context): amysWateringAppDatabase =
+    fun providesDatabase(@ApplicationContext context: Context): AmysWateringAppDatabase =
         Room.databaseBuilder(
             context,
-            amysWateringAppDatabase::class.java,
+            AmysWateringAppDatabase::class.java,
         "amysWateringAppDatabase"
             ).build()
 }

@@ -13,4 +13,7 @@
     <string name="NoneOfYourPlantsNeedWatering">None of your plants need watering!</string>
     <string name="PlantsThatNeedWatering">Plants that need watering</string>
     <string name="AllYourPlantsNeedWatering">All your plants need watering!</string>
+    <string name="introductionThree">Take the next few minutes to put your plants in the safe hands of HappyTree</string>
+    <string name="IntroductionTwo">With our app less of your plants are going to end up as sad shriveled shrubs</string>
+    <string name="IntroductionOne">Welcome to HappyTree! We\'re glad you\'ve joined</string>
 </resources>

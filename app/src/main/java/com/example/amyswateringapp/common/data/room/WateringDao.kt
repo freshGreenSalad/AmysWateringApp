@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.common.data.Room
+package com.example.amyswateringapp.common.data.room
 
 import androidx.room.*
 import com.example.amyswateringapp.Plant
@@ -10,7 +10,7 @@ interface WateringDao {
     fun insertAll(vararg plant: Plant)
 
     @Query("SELECT * FROM Plant")
-    fun getall(): Flow<List<Plant>>
+    fun getAll(): Flow<List<Plant>>
 
     @Update
     fun updatePlant (vararg: Plant)

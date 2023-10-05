@@ -84,6 +84,7 @@ dependencies {
     implementation("androidx.compose.animation:animation-graphics")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(libs.androidx.foundation)
     implementation(platform("androidx.compose:compose-bom:2023.01.00"))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.material3)

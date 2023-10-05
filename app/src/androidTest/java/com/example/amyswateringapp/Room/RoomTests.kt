@@ -5,8 +5,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.example.amyswateringapp.Plant
-import com.example.amyswateringapp.common.data.Room.WateringDao
-import com.example.amyswateringapp.common.data.Room.amysWateringAppDatabase
+import com.example.amyswateringapp.common.data.room.WateringDao
+import com.example.amyswateringapp.common.data.room.AmysWateringAppDatabase
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotSame
 import kotlinx.coroutines.test.runTest
@@ -21,14 +21,14 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 @SmallTest //
 class RoomTests {
-    lateinit var database: amysWateringAppDatabase
+    lateinit var database: AmysWateringAppDatabase
     lateinit var dao: WateringDao
 
     @Before
     fun setUp(){
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
-            amysWateringAppDatabase::class.java,
+            AmysWateringAppDatabase::class.java,
         ).allowMainThreadQueries().build()
         dao = database.wateringDao()
     }
@@ -44,7 +44,7 @@ class RoomTests {
         runTest{
             val plant = Plant(1)
             dao.insertAll(plant)
-            val firstPlant = dao.getall().first().get(0)
+            val firstPlant = dao.getAll().first().get(0)
             assertEquals(plant, firstPlant)
         }
     }
@@ -55,7 +55,7 @@ class RoomTests {
             val plant = Plant(1)
             dao.insertAll(plant)
             dao.deletePlant(plant)
-            val plantlist = dao.getall().first()
+            val plantlist = dao.getAll().first()
             assertEquals(plantlist, emptyList<Plant>())
         }
     }
@@ -67,7 +67,7 @@ class RoomTests {
             val newPlant = Plant(1,"newplant")
             dao.insertAll(plant)
             dao.updatePlant(newPlant)
-            val plantFlow = dao.getall().first().get(0)
+            val plantFlow = dao.getAll().first().get(0)
             assertNotSame(plant, plantFlow)
         }
     }
