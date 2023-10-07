@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.introduction.domain
+package com.example.amyswateringapp.features.introduction.domain
 
 
 enum class Position(){

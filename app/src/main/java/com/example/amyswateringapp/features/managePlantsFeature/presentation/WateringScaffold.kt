@@ -30,7 +30,7 @@ import androidx.compose.ui.graphics.Color
 
 @Composable
 fun WateringAppHome(
-    viewModel: WateringViewModel = hiltViewModel()
+    viewModel: WateringViewModel
 ) {
     WateringAppHomeScaffold(
         newPlantState = viewModel.newPlant.collectAsStateWithLifecycle(),

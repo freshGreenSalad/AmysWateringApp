@@ -1,4 +1,4 @@
-package com.example.amyswateringapp.introduction.presentation
+package com.example.amyswateringapp.features.introduction.presentation
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -9,27 +9,25 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
 import com.example.amyswateringapp.R
-import com.example.amyswateringapp.common.presentation.animatedBrush
-import com.example.amyswateringapp.introduction.domain.Position
-import com.example.amyswateringapp.introduction.domain.end
-import com.example.amyswateringapp.introduction.domain.middle
-import com.example.amyswateringapp.introduction.domain.none
-import com.example.amyswateringapp.introduction.domain.start
+import com.example.amyswateringapp.features.introduction.domain.Position
+import com.example.amyswateringapp.features.introduction.domain.end
+import com.example.amyswateringapp.features.introduction.domain.middle
+import com.example.amyswateringapp.features.introduction.domain.none
+import com.example.amyswateringapp.features.introduction.domain.start
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -46,38 +44,63 @@ fun AnimationManager(
         remember{ mutableStateOf(none) }
     )
 
+    val text = listOf(
+        stringResource(R.string.IntroductionOne),
+        stringResource(R.string.IntroductionTwo),
+        stringResource(R.string.introductionThree)
+    )
+
     val treeLocation = remember { mutableStateOf(400.dp) }
+    val navigation = remember { mutableStateOf(false) }
     //state holders end
+
+    LaunchedEffect(key1 = navigation.value){
+        if (navigation.value){
+            delay(1000L)
+            navigateToMain()
+        }
+    }
 
     when (dragState.targetValue){
         Position.One -> {
             animationList[0].value = start
+            animationList[1].value=  none
+            animationList[2].value = none
+
             showSwipeRightArrowAndText.value = true
         }
         Position.Two ->{
             showSwipeRightArrowAndText.value = false
+
             animationList[0].value = middle
             animationList[1].value=  start
-            treeLocation.value = 300.dp
+            animationList[2].value = none
+
+            treeLocation.value = 50.dp
         }
 
         Position.Three -> {
             animationList[0].value = end
             animationList[1].value = middle
             animationList[2].value = start
-            treeLocation.value = 200.dp
+
+            treeLocation.value = 40.dp
         }
         Position.Four -> {
             animationList[1].value = end
             animationList[2].value = middle
-            treeLocation.value = 100.dp
+
+            treeLocation.value = 30.dp
 
         }
         Position.Five -> {
             animationList[2].value = end
-            treeLocation.value = 0.dp
+            treeLocation.value = 20.dp
+            navigation.value = true
         }
     }
+
+    val localWidth = with(LocalDensity.current){ LocalConfiguration.current.screenWidthDp.dp.toPx() }
 
     Box(modifier = Modifier
         .background(color = MaterialTheme.colorScheme.primary)
@@ -85,38 +108,28 @@ fun AnimationManager(
         .anchoredDraggable(dragState, Orientation.Horizontal),
         contentAlignment = Alignment.Center
     ) {
-
-        treeAnimation( treeLocation) { Tree() }
-
-        animationList.forEach {animation ->
+    /*val listOfTreeAngles = listOf(10)
+        listOfTreeAngles.forEach {angle ->
+            treeAnimation(treeLocation, angle) { Tree() }
+        }*/
+        animationList.forEachIndexed {index, animation  ->
             LeftRightDragAnimation(
                 color = Color.Red,
                 goIn = animation,
-                xOffset = 1250.0f,
-                reverse = 1f,
-                text = stringResource(R.string.IntroductionOne)
+                xOffset = localWidth,
+                reverse = if(index % 2 == 0){-1f}else{1f},
+                text = text[index]
             ) { color, animateYOffset, animateXOffset, xOffset, goIn, text ->
                 AnimateableCircle(
                     color, animateYOffset, animateXOffset, xOffset, goIn, text
                 )
             }
         }
-        if(showSwipeRightArrowAndText.value) { ShimmerSwipeRightToStart()}
+        if(showSwipeRightArrowAndText.value) { ArrowShimmerAndText()}
     }
 }
 
-@Composable
-fun ShimmerSwipeRightToStart(){
-    Text(
-        modifier = Modifier.width(400.dp),
-        text = "swipe Right to get started",
-        style = MaterialTheme.typography.headlineLarge.copy(
-            brush = animatedBrush(32.sp)
-        ),
-        textAlign = TextAlign.Center,
-    )
-    Arrow()
-}
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

@@ -111,7 +111,9 @@ dependencies {
     kaptAndroidTest(libs.hilt.compiler)
     testImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.hilt.android.testing)
+
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation (libs.androidx.navigation.compose)
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
